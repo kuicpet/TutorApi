@@ -9,6 +9,7 @@ async function validatePassword(plainPassword, hashedPassword){
     return await bcrypt.compare(plainPassword,hashedPassword);
 }
 
+//User SignUp logic
 exports.signup = async (req, res, next) => {
     try {
         const { name, email, password, role } = req.body;
@@ -47,6 +48,7 @@ exports.signup = async (req, res, next) => {
     }
 }
 
+//User Sign logic
 exports.signin = async (req, res, next) => {
     try {
        const { email, password } = req.body;
