@@ -1,21 +1,32 @@
 const express = require("express");
+const mongoose = require('mongoose');
 const bodyParser = require("body-parser");
 const cors = require("cors");
 require('dotenv').config();
 
 
-const app = express();
+const app = express();                // express app
+const url = process.env.MONGO_URI;    // connection string
+
+
+// set up mongoose connection to database
+mongoose.connect(url,{useNewUrlParser: true, useUnifiedTopology: true}).then(() => {
+    console.log("Connected to Database");
+}).catch((error) => {
+    console.log("Failed to Connect to Database");
+    console.log(error);
+});
 
 
 
 
-
-app.use(express.json());
+app.use(express.json());                                // express to use json
 app.use(cors());                                        // handling cors errors
 app.use(bodyParser.json());                             // parse requests of content-type - application/json
 app.use(bodyParser.urlencoded({extended: false}));      // parse requests of content-type - application/x-www-form-urlencoded
 
 
+// sample test route 
 app.get('/api/v1',(req,res) => {
     res.json({
         message: "Welcome to Tutor Api!"
