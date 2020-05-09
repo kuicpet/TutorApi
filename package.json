@@ -1,5 +1,5 @@
 {
-  "name": "TutorApi",
+  "name": "tutorapi",
   "version": "1.0.0",
   "description": "Api for Online Tutoring App",
   "main": "index.js",
