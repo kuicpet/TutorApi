@@ -1,6 +1,7 @@
 const User = require('../models/userModel');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const { roles } = require('../roles');
 
 
 async function hashPassword(password){
@@ -124,3 +125,34 @@ exports.deleteuser = async (req,res,next) => {
     }
 }
 
+// Access Control for Users
+exports.grantAcces = function(action, resource){
+    return async (req,res,next) => {
+        try {
+            const permission = roles.can(req.user.role)[action](resource);
+            if(!permission.granted){
+                return res.status(401).json({
+                    error: "You don't have enough permission to perform this action"
+                });
+            }
+            next()
+        } catch (error) {
+            next(error)
+        }
+    }
+}
+
+//Access for Logged In Users
+exports.allowIfLoggedIn = async (req,res,next) => {
+    try {
+        const user = res.locals.loggedInUser;
+        if(!user)
+        return res.status(401).json({
+            error: "You need to be logged in to access this route"
+        });
+        req.user = user;
+        next();
+    } catch (error) {
+        next(error);
+    }
+}
