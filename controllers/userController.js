@@ -1,6 +1,8 @@
 const User = require('../models/userModel');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const { roles } = require('../roles');
+
 
 async function hashPassword(password){
     return await bcrypt.hash(password,10);
@@ -10,7 +12,7 @@ async function validatePassword(plainPassword, hashedPassword){
 }
 
 //User SignUp logic
-exports.signup = async (req, res, next) => {
+exports.signUp = async (req, res, next) => {
     try {
         const { name, email, password, role } = req.body;
         if(!email || !password || !name ){
@@ -49,7 +51,7 @@ exports.signup = async (req, res, next) => {
 }
 
 //User Sign logic
-exports.signin = async (req, res, next) => {
+exports.signIn = async (req, res, next) => {
     try {
        const { email, password } = req.body;
        const user = await User.findOne({ email });
