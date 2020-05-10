@@ -125,7 +125,7 @@ exports.deleteuser = async (req,res,next) => {
     }
 }
 
-// Access Control
+// Access Control for Users
 exports.grantAcces = function(action, resource){
     return async (req,res,next) => {
         try {
