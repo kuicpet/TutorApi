@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 const bodyParser = require("body-parser");
 const jwt = require('jsonwebtoken');
 const User = require('./models/userModel');
-const routes = require('./routes/route');
 const cors = require("cors");
+const routes = require('./routes/route');
 require('dotenv').config();
 
 
@@ -33,7 +33,7 @@ app.use(async (req,res,next) => {
         const accessToken = req.headers["x-access-token"];
         const { userId, exp} = await jwt.verify(accessToken,process.env.JWT_SECRET);
         //Checking if token is expired
-        if(exp < Date.now().valueOf()/1000){
+        if( exp < Date.now().valueOf()/1000){
             return res.status(401).json({
                 error: "token is expired.please login to obtain new one"
             });
@@ -44,6 +44,7 @@ app.use(async (req,res,next) => {
         next();
     }
 });
+app.use('/',routes);
 // sample test route 
 app.get('/api/v1',(req,res) => {
     res.json({

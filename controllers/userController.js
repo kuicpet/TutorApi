@@ -14,42 +14,23 @@ async function validatePassword(plainPassword, hashedPassword){
 //User SignUp logic
 exports.signUp = async (req, res, next) => {
     try {
-        const { name, email, password, role } = req.body;
-        if(!email || !password || !name ){
-            res.status(400).json({
-                status: false,
-                message: "All Fields are Required!"
-            });
-            return;
-        }
-        User.findOne({ email }).then((user) => {
-            if(user){
-                return res.json({
-                    status: false,
-                    message: "This Email Already exists!"
-                });
-            } else {
-                const hashedPassword = await hashPassword(password);
-                const newUser = new User({name,email,password,hashedPassword,role: role || "student" });
-                const accessToken = jwt.sign({ userId: newUser._id},process.env.JWT_SECRET,{
-                    expiresIn: "1d"
-                });
-                newUser.accessToken = accessToken;
-                await newUser.save();
-                res.json({
-                    status: true,
-                    message: "User SignUp successful!",
-                    data: newUser,
-                    accessToken
-                });
-            };
-        });
-       
+     const { name,email, password, role } = req.body
+     const hashedPassword = await hashPassword(password);
+     const newUser = new User({ name,email, password: hashedPassword, role: role || "student" });
+     const accessToken = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, {
+      expiresIn: "1d"
+     });
+     newUser.accessToken = accessToken;
+     await newUser.save();
+     res.json({
+      data: newUser,
+      accessToken
+     })
     } catch (error) {
-        next(error)
+     next(error)
     }
-}
-
+   }
+    
 //User Sign logic
 exports.signIn = async (req, res, next) => {
     try {
