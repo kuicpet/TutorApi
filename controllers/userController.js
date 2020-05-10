@@ -2,6 +2,7 @@ const User = require('../models/userModel');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
+
 async function hashPassword(password){
     return await bcrypt.hash(password,10);
 }
@@ -10,7 +11,7 @@ async function validatePassword(plainPassword, hashedPassword){
 }
 
 //User SignUp logic
-exports.signup = async (req, res, next) => {
+exports.signUp = async (req, res, next) => {
     try {
         const { name, email, password, role } = req.body;
         if(!email || !password || !name ){
@@ -49,7 +50,7 @@ exports.signup = async (req, res, next) => {
 }
 
 //User Sign logic
-exports.signin = async (req, res, next) => {
+exports.signIn = async (req, res, next) => {
     try {
        const { email, password } = req.body;
        const user = await User.findOne({ email });
@@ -70,3 +71,56 @@ exports.signin = async (req, res, next) => {
         next(error);
     }
 }
+
+//Get all Users
+exports.getUsers = async (req,res,next) => {
+    const users = await User.find({});
+    res.status(200).json({
+        data: users
+    });
+}
+
+//get a User by Id
+exports.getUser = async (req,res,next) => {
+    try {
+        const userId = req.params.userId;
+        const user = await User.findById(userId);
+        if(!user) return next(new Error("User does not Exist!"));
+        res.status(200).json({
+            data: user
+        });
+    } catch (error) {
+        next(error)
+    }
+}
+
+// Update a User
+exports.updateUser = async (req,res,next) => {
+    try {
+        const update = req.body;
+        const userId = req.params.userId;
+        await User.findByIdAndUpdate(userId,update);
+        const user = await User.findById(userId);
+        res.status(200).json({
+            data: user,
+            message: "User has been Updated!"
+        });
+    } catch (error) {
+        next(error)
+    }
+}
+
+// Delete a User
+exports.deleteuser = async (req,res,next) => {
+    try {
+        const userId = req.params.userId;
+        await User.findByIdAndDelete(userId);
+        res.status(200).json({
+            data: null,
+            message: "User has been Deleted!"
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
