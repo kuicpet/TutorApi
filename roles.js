@@ -4,18 +4,22 @@ const ac = new AccessControl();
 
 exports.roles = (function(){
     ac.grant("student")
-      .readOwn("")
-      .updateOwn("")
+      .readOwn("subject")
+      .readAny("tutor")
+      .createAny("lesson")
 
     ac.grant("tutor")
       .extend("student")
-      .readAny("")
+      .readAny("subject")
+      .updateOwn("subject")
+      .deleteOwn("subject")
 
     ac.grant("admin")
       .extend("student")
       .extend("tutor")
-      .updateAny("")
-      .deleteAny("")
+      .createAny("subject",)
+      .updateAny("subject","lesson")
+      .deleteAny("subject","category","tutor","lesson")
 
 return ac;
 })
