@@ -1,6 +1,9 @@
 const express = require("express");
 const mongoose = require('mongoose');
 const bodyParser = require("body-parser");
+const jwt = require('jsonwebtoken');
+const User = require('./models/userModel');
+const routes = require('./routes/route');
 const cors = require("cors");
 require('dotenv').config();
 
@@ -25,7 +28,22 @@ app.use(cors());                                        // handling cors errors
 app.use(bodyParser.json());                             // parse requests of content-type - application/json
 app.use(bodyParser.urlencoded({extended: false}));      // parse requests of content-type - application/x-www-form-urlencoded
 
-
+app.use(async (req,res,next) => {
+    if(req.headers["x-access-token"]){
+        const accessToken = req.headers["x-access-token"];
+        const { userId, exp} = await jwt.verify(accessToken,process.env.JWT_SECRET);
+        //Checking if token is expired
+        if(exp < Date.now().valueOf()/1000){
+            return res.status(401).json({
+                error: "token is expired.please login to obtain new one"
+            });
+        }
+        res.locals.loggedInuser = await User.findById(userId);
+        next();
+    } else {
+        next();
+    }
+});
 // sample test route 
 app.get('/api/v1',(req,res) => {
     res.json({
