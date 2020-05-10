@@ -44,6 +44,7 @@ app.use(async (req,res,next) => {
         next();
     }
 });
+app.use('/api/v1/',routes);
 // sample test route 
 app.get('/api/v1',(req,res) => {
     res.json({
