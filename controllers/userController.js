@@ -70,6 +70,28 @@ exports.signin = async (req, res, next) => {
         next(error);
     }
 }
+//Get all Users
+exports.getUsers = async (req,res,next) => {
+    const users = await User.find({});
+    res.status(200).json({
+        data: users
+    });
+}
+
+//get a User by Id
+exports.getUser = async (req,res,next) => {
+    try {
+        const userId = req.params.userId;
+        const user = await User.findById(userId);
+        if(!user) return next(new Error("User does not Exist!"));
+        res.status(200).json({
+            data: user
+        });
+    } catch (error) {
+        next(error)
+    }
+}
+
 // Update a User
 exports.updateUser = async (req,res,next) => {
     try {
