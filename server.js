@@ -5,7 +5,16 @@ require('dotenv').config();
 
 
 const app = express();
+const url = process.env.MONGO_URI;    // connection string
 
+
+// set up mongoose connection to database
+mongoose.connect(url,{useNewUrlParser: true, useUnifiedTopology: true}).then(() => {
+    console.log("Connected to Database");
+}).catch((error) => {
+    console.log("Failed to Connect to Database");
+    console.log(error);
+});
 
 
 
