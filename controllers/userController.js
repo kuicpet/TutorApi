@@ -45,7 +45,7 @@ exports.signIn = async (req, res, next) => {
        });
        await User.findOneAndUpdate(user._id, { accessToken })
        res.status(200).json({
-           message: "User SignIn successful!",
+           message: "User Sign In successful!",
            data: { email: user.email, role: user.role },
            accessToken
        });
