@@ -72,7 +72,6 @@ exports.signIn = async (req, res, next) => {
         next(error);
     }
 }
-
 //Get all Users
 exports.getUsers = async (req,res,next) => {
     const users = await User.find({});
