@@ -6,7 +6,7 @@ const SubjectSchema = new Schema({
         type: String,
         required: true
     },
-    category: [
+    categories: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'category'
