@@ -14,15 +14,19 @@ async function validatePassword(plainPassword, hashedPassword){
 //User SignUp logic
 exports.signUp = async (req, res, next) => {
     try {
-     const { name,email, password, role } = req.body
+     const { name,email, password, role } = req.body;
+     let newUser = await User.findOne({email});
+     if(newUser){ throw new Error("Email already Exists!");
+     }
      const hashedPassword = await hashPassword(password);
-     const newUser = new User({ name,email, password: hashedPassword, role: role || "student" });
+     newUser = new User({ name,email, password: hashedPassword, role: role || "student" });
      const accessToken = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, {
       expiresIn: "1d"
      });
      newUser.accessToken = accessToken;
      await newUser.save();
      res.json({
+      message: "User Signup Successful!",
       data: newUser,
       accessToken
      })
@@ -36,8 +40,9 @@ exports.signIn = async (req, res, next) => {
     try {
        const { email, password } = req.body;
        const user = await User.findOne({ email });
-       if( !user ) return 
-       next(new Error("Email does not Exist!"));
+       if( !user ){
+           throw new Error("Email not found!")
+       }
        const validPassword = await validatePassword( password, user.password );
        if(!validPassword ) return next(new Error("Password is not correct!"))
        const accessToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET,{
@@ -65,7 +70,7 @@ exports.getUsers = async (req,res,next) => {
 exports.getUser = async (req,res,next) => {
     try {
         const userId = req.params.userId;
-        const user = await User.findById(userId);
+        const user = await User.findById({userId});
         if(!user) return next(new Error("User does not Exist!"));
         res.status(200).json({
             data: user
