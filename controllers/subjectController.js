@@ -3,7 +3,7 @@ const { Subject } = require('../models/subjectModel');
 
 
 //Create a Subject by Id
-exports.createSubject = (req,res,next) => {
+exports.createSubject = async (req,res,next) => {
     try {
         const { name,category } = req.body;
         let newSubject = await Subject.findOne(name);
@@ -19,7 +19,7 @@ exports.createSubject = (req,res,next) => {
     }
 }
 //Get all Subjects
-exports.getSubjects = (req,res,next) => {
+exports.getSubjects =  async(req,res,next) => {
     try {
         const subjects = await Subject.find({}).populate('lessons').execPopulate();
             res.status(200).json({
@@ -30,7 +30,7 @@ exports.getSubjects = (req,res,next) => {
     }
 }
 //Get a Subject by Id
-exports.getSubject = (req,res,next) => {
+exports.getSubject = async (req,res,next) => {
     try {
         const subjectId = req.params.subjectId;
         const subject = await Subject.find({subjectId}).populate('lessons').execPopulate();
@@ -45,7 +45,7 @@ exports.getSubject = (req,res,next) => {
     }
 }
 //Get a Subject by Name (ascending order)
-exports.getSubjectName = (req,res,next) => {
+exports.getSubjectName = async (req,res,next) => {
     try {
         const subjectName = req.body.name;
         const sortname= {subjectName: 1}

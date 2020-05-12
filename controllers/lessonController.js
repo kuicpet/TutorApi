@@ -2,7 +2,7 @@ const { Lesson } = require('../models/lessonModel');
 
 
 //Create a lesson
-exports.createLesson = (req,res,next) => {
+exports.createLesson = async (req,res,next) => {
     try {
         const { title, subject } = req.body;
         let newLesson = await Lesson.findOne({title});
@@ -18,7 +18,7 @@ exports.createLesson = (req,res,next) => {
     }
 }
 //Get all lessons
-exports.getLessons = (req,res,next) => {
+exports.getLessons =async (req,res,next) => {
     try {
         const lessons = Lesson.find({}).populate('subjects').execPopulate();
         res.json({
@@ -29,7 +29,7 @@ exports.getLessons = (req,res,next) => {
     }
 }
 //Get lesson by Id
-exports.getLesson = (req,res,next) => {
+exports.getLesson = async (req,res,next) => {
     try {
         const lessonId = req.params.lessonId;
         const lesson = await Lesson.find({lessonId}).populate('subject').execPopulate();
@@ -42,7 +42,7 @@ exports.getLesson = (req,res,next) => {
     }
 }
 //Update lesson by Id
-exports.updateLesson = (req,res,next) => {
+exports.updateLesson =async (req,res,next) => {
     try {
         const update = req.body;
         const lessonId = req.params.lessonId;
