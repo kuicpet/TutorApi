@@ -1,4 +1,4 @@
-const { Subject } = require('../models/subjectModel');
+const  Subject  = require('../models/subjectModel');
 
 
 
@@ -6,7 +6,7 @@ const { Subject } = require('../models/subjectModel');
 exports.createSubject = async (req,res,next) => {
     try {
         const { name,category } = req.body;
-        let newSubject = await Subject.findOne(name);
+        let newSubject = await Subject.findOne({name});
         if(newSubject) throw new Error("Subject already Exists!");
         newSubject = new Subject({ name,category });
         await newSubject.save();
@@ -19,9 +19,9 @@ exports.createSubject = async (req,res,next) => {
     }
 }
 //Get all Subjects
-exports.getSubjects =  async(req,res,next) => {
+exports.getSubjects =  async (req,res,next) => {
     try {
-        const subjects = await Subject.find({}).populate('lessons').execPopulate();
+        const subjects = await Subject.find({}).populate('lessons');
             res.status(200).json({
                 data: subjects
             })
@@ -33,7 +33,7 @@ exports.getSubjects =  async(req,res,next) => {
 exports.getSubject = async (req,res,next) => {
     try {
         const subjectId = req.params.subjectId;
-        const subject = await Subject.find({subjectId}).populate('lessons').execPopulate();
+        const subject = await Subject.find({subjectId}).populate('lesson');
         if(!subject){
             return next(new Error("Subject does not Exists!"));
         }
@@ -49,9 +49,7 @@ exports.getSubjectName = async (req,res,next) => {
     try {
         const subjectName = req.body.name;
         const sortname= {subjectName: 1}
-        const subject = await Subject.find({subjectName}).sort(sortname).toArray((err,res) => {
-            if(err) throw err;
-        })
+        const subject = await Subject.find({subjectName}).sort(sortname);
         if(!subject){
             return next(new Error("Subject name does not exists!"));
         }

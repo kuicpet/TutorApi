@@ -1,4 +1,4 @@
-const { Category } = require('../models/categoryModel');
+const  Category  = require('../models/categoryModel');
 
 //Create a Category
 exports.createCategory = async (req,res,next) => {
@@ -19,7 +19,7 @@ exports.createCategory = async (req,res,next) => {
 //Get all Categories
 exports.getCategories = async (req,res,next) => {
     try {
-        const categories = await Category.find({}).populate('subjects').execPopulate();
+        const categories = await Category.find({}).populate('subjects');
         res.status(200).json({
             data: categories
         })
@@ -31,7 +31,7 @@ exports.getCategories = async (req,res,next) => {
 exports.getCategory = async (req,res,next) => {
     try {
         const categoryId = req.params.categoryId;
-        const category = await Category.find({categoryId}).populate('sunject').execPopulate();
+        const category = await Category.find({categoryId}).populate('sunject');
         if(!category) return next(new Error("No such Category Exists!"));
         res.status(200).json({
             data: category

@@ -39,9 +39,9 @@ exports.signUp = async (req, res, next) => {
 exports.signIn = async (req, res, next) => {
     try {
        const { email, password } = req.body;
-       const user = await User.findOne({ email });
+       const user = await User.findOne({email});
        if( !user ){
-           throw new Error("Email not found!")
+           throw new Error({error: "Email not found!"})
        }
        const validPassword = await validatePassword( password, user.password );
        if(!validPassword ) return next(new Error("Password is not correct!"))
@@ -58,12 +58,49 @@ exports.signIn = async (req, res, next) => {
         next(error);
     }
 }
+//Get all Tutors
+exports.getTutors = async (req,res,next) => {
+    const tutors = await User.find({role: "tutor"});
+    res.status(200).json({
+        data: tutors
+    });
+    next();
+}
+//get Tutor by Id
+exports.getTutor = async (req,res,next) => {
+    try {
+        const tutorId = req.params.tutorId;
+        const tutor = await User.findById({tutorId,role: "tutor"});
+        res.status(200).json({
+            data: tutor
+        })
+    } catch (error) {
+        next(error);
+    }
+}
+//Get Tutor by Name (asc)
+exports.getTutorName = async (req,res,next) => {
+    try {
+        const tutorName = req.body.tutorName;
+        const sortName = {name: 1};
+        const tutor = await User.find({tutorName}).sort(sortName);
+         if(!tutor){
+             return next(new Error("Tutor does not Exist!"));
+         }
+         res.status(200).json({
+             data: tutorName
+         });
+    } catch (error) {
+        next(error);
+    }
+}
 //Get all Users
 exports.getUsers = async (req,res,next) => {
     const users = await User.find({});
     res.status(200).json({
         data: users
     });
+    next();
 }
 
 //get a User by Id
@@ -95,7 +132,19 @@ exports.updateUser = async (req,res,next) => {
         next(error)
     }
 }
-
+//Delete a Tutor
+exports.deleteTutor = async (req,res,next) => {
+    try {
+        const tutorId = req.params.tutorId;
+        await User.findByIdAndDelete(tutorId);
+        res.status(200).json({
+            data: null,
+            message: "Tutor successfully deactivated!"
+        })
+    } catch (error) {
+        next(error);
+    }
+}
 // Delete a User
 exports.deleteUser = async (req,res,next) => {
     try {
