@@ -8,7 +8,7 @@ exports.createCategory = async (req,res,next) => {
         
     }
 }
-//Read a Category
+//Get a Category
 exports.getCategory = async (req,res,next) => {
     try {
         
@@ -19,9 +19,16 @@ exports.getCategory = async (req,res,next) => {
 //Update a Category
 exports.updateCategory = async (req,res,next) => {
     try {
-        
+        const update = req.body;
+        const categoryId = req.params.categoryId;
+        await Category.findByIdAndUpdate(categoryId,update,{ useFindAndModify : false});
+        const category = await Category.findById(categoryId);
+        res.status(200).json({
+            data: category,
+            message: "Category Updated Successfully!"
+        });
     } catch (error) {
-        
+        next(error);
     }
 }
 //Delete a Category

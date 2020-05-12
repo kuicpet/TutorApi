@@ -6,6 +6,13 @@ const CategorySchema = new Schema({
         type: String,
         required: true
     },
+    level:[
+        {
+            type: String,
+            default: "Pri",
+            enum: ["pri","jss","sss"]
+        }
+    ],
     subjects: [
         {
             type: mongoose.Schema.Types.ObjectId,
