@@ -5,15 +5,23 @@ const { Subject } = require('../models/subjectModel');
 //Create a Subject by Id
 exports.createSubject = (req,res,next) => {
     try {
-        
+        const { name,category } = req.body;
+        let newSubject = await Subject.findOne(name);
+        if(newSubject) throw new Error("Subject already Exists!");
+        newSubject = new Subject({ name,category });
+        await newSubject.save();
+        res.status(200).json({
+            message: "New Subject Created!",
+            data: newSubject
+        });
     } catch (error) {
-        
+        next(error);
     }
 }
 //Get all Subjects
 exports.getSubjects = (req,res,next) => {
     try {
-        const subjects = await Subject.find({});
+        const subjects = await Subject.find({}).populate('lessons').execPopulate();
             res.status(200).json({
                 data: subjects
             })
@@ -25,7 +33,7 @@ exports.getSubjects = (req,res,next) => {
 exports.getSubject = (req,res,next) => {
     try {
         const subjectId = req.params.subjectId;
-        const subject = await Subject.find({subjectId});
+        const subject = await Subject.find({subjectId}).populate('lessons').execPopulate();
         if(!subject){
             return next(new Error("Subject does not Exists!"));
         }
@@ -39,9 +47,19 @@ exports.getSubject = (req,res,next) => {
 //Get a Subject by Name (ascending order)
 exports.getSubjectName = (req,res,next) => {
     try {
-        
+        const subjectName = req.body.name;
+        const sortname= {subjectName: 1}
+        const subject = await Subject.find({subjectName}).sort(sortname).toArray((err,res) => {
+            if(err) throw err;
+        })
+        if(!subject){
+            return next(new Error("Subject name does not exists!"));
+        }
+        res.status(200).json({
+            data:subjectName
+        })
     } catch (error) {
-        
+        next(error);
     }
 }
 //Update a Subject by Id

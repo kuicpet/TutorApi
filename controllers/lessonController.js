@@ -4,15 +4,23 @@ const { Lesson } = require('../models/lessonModel');
 //Create a lesson
 exports.createLesson = (req,res,next) => {
     try {
-        
+        const { title, subject } = req.body;
+        let newLesson = await Lesson.findOne({title});
+        if(newLesson) throw new Error('Lesson already Exists!');
+        newLesson = new Lesson({title,subject});
+        await newLesson.save();
+        res.status(200).json({
+            messsage: "New Lesson created!",
+            data: newLesson,
+        })
     } catch (error) {
-        
+        next(error);
     }
 }
 //Get all lessons
 exports.getLessons = (req,res,next) => {
     try {
-        const lessons = Lesson.find({});
+        const lessons = Lesson.find({}).populate('subjects').execPopulate();
         res.json({
             data: lessons
         })
@@ -24,8 +32,8 @@ exports.getLessons = (req,res,next) => {
 exports.getLesson = (req,res,next) => {
     try {
         const lessonId = req.params.lessonId;
-        const lesson = await Lesson.find({lessonId});
-        if(!lesson) return next(new Error("Lesson does not Exists"));
+        const lesson = await Lesson.find({lessonId}).populate('subject').execPopulate();
+        if(!lesson) return next(new Error("Lesson does not Exist!"))
         res.status(200).json({
             data: lesson
         })
