@@ -4,8 +4,16 @@ const Schema = mongoose.Schema;
 const CategorySchema = new Schema({
     name: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
+    level:[
+        {
+            type: String,
+            default: "Pri",
+            enum: ["pri","jss","sss"]
+        }
+    ],
     subjects: [
         {
             type: mongoose.Schema.Types.ObjectId,

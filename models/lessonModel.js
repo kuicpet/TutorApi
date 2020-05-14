@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 const LessonSchema = new Schema({
     title: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
     subjects: [
         {

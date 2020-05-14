@@ -9,6 +9,7 @@ const UserSchema = new Schema({
     },
     email: {
         type: String,
+        unique: true,
         required: true,
         trim: true
     },
@@ -17,13 +18,11 @@ const UserSchema = new Schema({
         required: true,
         trim: true
     },
-    role: [
-        {
-            type: String,
-            default: "student",
-            enum: ["student","tutor","admin"]
-        }
-    ],
+    role: {
+        type: String,
+        required: true,
+        trim: true
+    },
     accessToken: {
         type: String
     }
