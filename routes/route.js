@@ -32,7 +32,7 @@ const authorize = require('../controllers/userController');
  *       200:
  *         description: User SignUp Successful
  */
-router.post('/api/v1/signup',userController.signUp);
+router.post('/signup',userController.signUp);
 
 //User signin
  /**
@@ -55,7 +55,7 @@ router.post('/api/v1/signup',userController.signUp);
  *       200:
  *         description: User SignIn Successful
  */
-router.post('/api/v1/signin',userController.signIn);
+router.post('/signin',userController.signIn);
 
 //Create Category 
 /**
@@ -78,7 +78,7 @@ router.post('/api/v1/signin',userController.signIn);
  *       200:
  *         description: Category created Successfulyl
  */
-router.post('/api/v1/category',userController.allowIfLoggedIn,authorize.authorize(role.Admin),categoryController.createCategory);
+router.post('/category',userController.allowIfLoggedIn,authorize.authorize(role.Admin),categoryController.createCategory);
 
 //Create Subject 
 /**
@@ -101,7 +101,7 @@ router.post('/api/v1/category',userController.allowIfLoggedIn,authorize.authoriz
  *       200:
  *         description: subject created Successfully
  */
-router.post('/api/v1/subject',userController.allowIfLoggedIn,authorize.authorize(role.Admin,role.Tutor),subjectController.createSubject);
+router.post('/subject',userController.allowIfLoggedIn,authorize.authorize(role.Admin,role.Tutor),subjectController.createSubject);
 
 //Create Lesson 
 /**
@@ -124,7 +124,7 @@ router.post('/api/v1/subject',userController.allowIfLoggedIn,authorize.authorize
  *       200:
  *         description: Lesson created Successfully
  */
-router.post('/api/v1/lesson',userController.allowIfLoggedIn,authorize.authorize(role.Admin,role.Student),lessonController.createLesson);
+router.post('/lesson',userController.allowIfLoggedIn,authorize.authorize(role.Admin,role.Student),lessonController.createLesson);
 
 
 //Get all Categories
@@ -152,7 +152,7 @@ router.post('/api/v1/lesson',userController.allowIfLoggedIn,authorize.authorize(
  *         schema:
  *           $ref: '#/definitions/Category'
  */
-router.get('/api/v1/categories',authorize.authorize(),categoryController.getCategories);
+router.get('/categories',authorize.authorize(),categoryController.getCategories);
 
 //Get a Category by Id
 /**
@@ -176,7 +176,7 @@ router.get('/api/v1/categories',authorize.authorize(),categoryController.getCate
  *         schema:
  *           $ref: '#/definitions/category'
  */
-router.get('/api/v1/category/:categoryId',userController.allowIfLoggedIn,authorize.authorize(role.Admin),categoryController.getCategory);
+router.get('/category/:categoryId',userController.allowIfLoggedIn,authorize.authorize(role.Admin),categoryController.getCategory);
 
 //Get all Subjects
 /**
@@ -194,7 +194,7 @@ router.get('/api/v1/category/:categoryId',userController.allowIfLoggedIn,authori
  *         schema:
  *           $ref: '#/definitions/Subject'
  */
-router.get('/api/v1/subjects',userController.allowIfLoggedIn,authorize.authorize(),subjectController.getSubjects);
+router.get('/subjects',userController.allowIfLoggedIn,authorize.authorize(),subjectController.getSubjects);
 
 //Get a Subject by Id
 /**
@@ -218,7 +218,7 @@ router.get('/api/v1/subjects',userController.allowIfLoggedIn,authorize.authorize
  *         schema:
  *           $ref: '#/definitions/Subject'
  */
-router.get('/api/v1/subject/:subjectId',userController.allowIfLoggedIn,authorize.authorize(),subjectController.getSubject);
+router.get('/subject/:subjectId',userController.allowIfLoggedIn,authorize.authorize(),subjectController.getSubject);
 
 //Get a Suject by Name
 /**
@@ -242,7 +242,7 @@ router.get('/api/v1/subject/:subjectId',userController.allowIfLoggedIn,authorize
  *         schema:
  *           $ref: '#/definitions/subject'
  */
-router.get('/api/v1/subject/subjectName',userController.allowIfLoggedIn,authorize.authorize(),subjectController.getSubjectName);
+router.get('/subject/subjectName',userController.allowIfLoggedIn,authorize.authorize(),subjectController.getSubjectName);
 
 //Get all lessons
 /**
@@ -260,7 +260,7 @@ router.get('/api/v1/subject/subjectName',userController.allowIfLoggedIn,authoriz
  *         schema:
  *           $ref: '#/definitions/Lesson'
  */
-router.get('/api/v1/lessons',userController.allowIfLoggedIn,authorize.authorize(role.Admin),lessonController.getLessons);
+router.get('/lessons',userController.allowIfLoggedIn,authorize.authorize(role.Admin),lessonController.getLessons);
 
 //Get a lesson by Id
 /**
@@ -284,7 +284,7 @@ router.get('/api/v1/lessons',userController.allowIfLoggedIn,authorize.authorize(
  *         schema:
  *           $ref: '#/definitions/Lesson'
  */
-router.get('/api/v1/lesson/:lessonId',userController.allowIfLoggedIn,authorize.authorize(role.Admin),lessonController.getLesson);
+router.get('/lesson/:lessonId',userController.allowIfLoggedIn,authorize.authorize(role.Admin),lessonController.getLesson);
 
 //Get a User by Id
 /**
@@ -308,7 +308,7 @@ router.get('/api/v1/lesson/:lessonId',userController.allowIfLoggedIn,authorize.a
  *         schema:
  *           $ref: '#/definitions/User'
  */
-router.get('/api/v1/user/:userId',userController.allowIfLoggedIn,authorize.authorize(role.Admin),userController.getUser);
+router.get('/user/:userId',userController.allowIfLoggedIn,authorize.authorize(role.Admin),userController.getUser);
 
 //Get all Tutors
 /**
@@ -326,7 +326,7 @@ router.get('/api/v1/user/:userId',userController.allowIfLoggedIn,authorize.autho
  *         schema:
  *           $ref: '#/definitions/User'
  */
-router.get('/api/v1/tutors',userController.allowIfLoggedIn,authorize.authorize(role.Admin),userController.getTutors);
+router.get('/tutors',userController.allowIfLoggedIn,authorize.authorize(role.Admin),userController.getTutors);
 
 //Get Tutor by Id
 /**
@@ -350,7 +350,7 @@ router.get('/api/v1/tutors',userController.allowIfLoggedIn,authorize.authorize(r
  *         schema:
  *           $ref: '#/definitions/Tutor'
  */
-router.get('/api/v1/tutor/:tutorId',userController.allowIfLoggedIn,authorize.authorize(role.Admin),userController.getTutor);
+router.get('/tutor/:tutorId',userController.allowIfLoggedIn,authorize.authorize(role.Admin),userController.getTutor);
 
 //Get Tutor by Name
 /**
@@ -374,7 +374,7 @@ router.get('/api/v1/tutor/:tutorId',userController.allowIfLoggedIn,authorize.aut
  *         schema:
  *           $ref: '#/definitions/User'
  */
-router.get('/api/v1/tutor/tutorName',userController.allowIfLoggedIn,authorize.authorize(role.Admin,role.Student),userController.getTutorName);
+router.get('/tutor/tutorName',userController.allowIfLoggedIn,authorize.authorize(role.Admin,role.Student),userController.getTutorName);
 
 //Get all Users
 /**
@@ -392,7 +392,7 @@ router.get('/api/v1/tutor/tutorName',userController.allowIfLoggedIn,authorize.au
  *         schema:
  *           $ref: '#/definitions/User'
  */
-router.get('/api/v1/users',userController.allowIfLoggedIn,authorize.authorize(role.Admin),userController.getUsers);
+router.get('/users',userController.allowIfLoggedIn,authorize.authorize(role.Admin),userController.getUsers);
 
 
 
@@ -415,7 +415,7 @@ router.get('/api/v1/users',userController.allowIfLoggedIn,authorize.authorize(ro
  *       200:
  *         description: Category Updated Successfully
  */
-router.put('/api/v1/category/:categoryId',userController.allowIfLoggedIn,authorize.authorize(role.Admin),categoryController.updateCategory);
+router.put('/category/:categoryId',userController.allowIfLoggedIn,authorize.authorize(role.Admin),categoryController.updateCategory);
 
 //Update a Subject
 /**
@@ -436,7 +436,7 @@ router.put('/api/v1/category/:categoryId',userController.allowIfLoggedIn,authori
  *       200:
  *         description: Subject Updated Successfully
  */
-router.put('/api/v1/subject/:subjectId',userController.allowIfLoggedIn,authorize.authorize(role.Admin,role.Tutor),subjectController.updateSubject);
+router.put('/subject/:subjectId',userController.allowIfLoggedIn,authorize.authorize(role.Admin,role.Tutor),subjectController.updateSubject);
 
 //Update a Lesson
 /**
@@ -457,7 +457,7 @@ router.put('/api/v1/subject/:subjectId',userController.allowIfLoggedIn,authorize
  *       200:
  *         description: Lesson Updated Successfully
  */
-router.put('/api/v1/lesson/:lessonId',userController.allowIfLoggedIn,authorize.authorize(role.Admin),lessonController.updateLesson);
+router.put('/lesson/:lessonId',userController.allowIfLoggedIn,authorize.authorize(role.Admin),lessonController.updateLesson);
 
 //Update a User
 /**
@@ -478,7 +478,7 @@ router.put('/api/v1/lesson/:lessonId',userController.allowIfLoggedIn,authorize.a
  *       200:
  *         description: User Updated Successfully
  */
-router.put('/api/v1/user/:userId',userController.allowIfLoggedIn,authorize.authorize(role.Admin),userController.updateUser);
+router.put('/user/:userId',userController.allowIfLoggedIn,authorize.authorize(role.Admin),userController.updateUser);
 
 
 //Delete a User
@@ -501,7 +501,7 @@ router.put('/api/v1/user/:userId',userController.allowIfLoggedIn,authorize.autho
  *       200:
  *         description: User has been Deleted
  */
-router.delete('/api/v1/user/:userId',userController.allowIfLoggedIn,authorize.authorize(role.Admin),userController.deleteUser);
+router.delete('/user/:userId',userController.allowIfLoggedIn,authorize.authorize(role.Admin),userController.deleteUser);
 
 //Delete a Category
 /**
@@ -523,7 +523,7 @@ router.delete('/api/v1/user/:userId',userController.allowIfLoggedIn,authorize.au
  *       200:
  *         description: Category has been Deleted
  */
-router.delete('/api/v1/category/:categoryId',userController.allowIfLoggedIn,authorize.authorize(role.Admin),categoryController.deleteCategory);
+router.delete('/category/:categoryId',userController.allowIfLoggedIn,authorize.authorize(role.Admin),categoryController.deleteCategory);
 
 //Delete a Subject
 /**
@@ -545,7 +545,7 @@ router.delete('/api/v1/category/:categoryId',userController.allowIfLoggedIn,auth
  *       200:
  *         description: Subject has been Deleted
  */
-router.delete('/api/v1/subject/:subjectId',userController.allowIfLoggedIn,authorize.authorize(role.Admin),authorize.authorize(role.Tutor),subjectController.deleteSubject);
+router.delete('/subject/:subjectId',userController.allowIfLoggedIn,authorize.authorize(role.Admin),authorize.authorize(role.Tutor),subjectController.deleteSubject);
 
 //Delete a Lesson
 /**
@@ -567,7 +567,7 @@ router.delete('/api/v1/subject/:subjectId',userController.allowIfLoggedIn,author
  *       200:
  *         description: Lesson has been Deleted
  */
-router.delete('/api/v1/lesson/:lessonId',userController.allowIfLoggedIn,authorize.authorize(role.Admin),lessonController.deleteLesson);
+router.delete('/lesson/:lessonId',userController.allowIfLoggedIn,authorize.authorize(role.Admin),lessonController.deleteLesson);
 
 //Delete a Tutor
 /**
@@ -589,7 +589,7 @@ router.delete('/api/v1/lesson/:lessonId',userController.allowIfLoggedIn,authoriz
  *       200:
  *         description: Tutor has been Deleted
  */
-router.delete('/api/v1/tutor/:tutorId',userController.allowIfLoggedIn,authorize.authorize(role.Admin),userController.deleteTutor);
+router.delete('/tutor/:tutorId',userController.allowIfLoggedIn,authorize.authorize(role.Admin),userController.deleteTutor);
 
 
 

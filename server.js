@@ -72,7 +72,7 @@ app.use(async (req,res,next) => {
 });
 
 //api routes
-app.use('/',routes);
+app.use('/api/v1',routes);
 
 
 

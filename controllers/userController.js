@@ -4,12 +4,11 @@ const bcrypt = require('bcryptjs');
 
 
 
+
 async function hashPassword(password){
     return await bcrypt.hash(password,10);
 }
-async function validatePassword(plainPassword, hashedPassword){
-    return await bcrypt.compare(plainPassword,hashedPassword);
-}
+
 
 //User SignUp logic
 exports.signUp = async (req, res, next) => {
@@ -37,26 +36,39 @@ exports.signUp = async (req, res, next) => {
     
 //User Sign logic
 exports.signIn = async (req, res, next) => {
-    try {
-       const { email, password } = req.body;
-       const user = await User.findOne({email});
-       if( !user ){
-           return next(new Error("User Email not Found!"));
-       }
-       const validPassword = await validatePassword(password, user.password);
-       if(!validPassword ) return next(new Error("Password is not correct!"))
-       const accessToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET,{
-            expiresIn: "1d"
-       });
-       await User.findOneAndUpdate(user._id, { accessToken })
-       res.status(200).json({
-           message: "User Sign In successful!",
-           data: { email: user.email, role: user.role },
-           accessToken
-       });
-    } catch (error) {
-        next(error);
-    }
+   const { email,password} = req.body;
+   try {
+       let user = await User.findOne({ email });
+       if(!user)
+        return res.status(400).json({
+            message: "User Not Exists"
+        });
+        const isMatch = await bcrypt.compare(password,user.password);
+        if(!isMatch) 
+            return res.status(400).json({
+                message: 'Incorrect Password!'
+            });
+        const payload = {
+            users: {
+                id: user.id
+            }
+        };
+        jwt.sign(
+            payload,
+            process.env.JWT_SECRET,
+            { expiresIn: '1d'}
+        ),
+        (err,accessToken) => {
+            if(err) throw err;
+            res.status(200).json({
+                accessToken
+            });
+        }
+       
+   } catch (error) {
+       next(error);
+   }
+    
 }
 //Get all Tutors
 exports.getTutors = async (req,res,next) => {
