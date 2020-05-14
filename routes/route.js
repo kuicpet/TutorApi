@@ -18,7 +18,7 @@ const authorize = require('../controllers/userController');
  *   post:
  *     tags:
  *       - users
- *     description: Signsup a new user
+ *     description: Signs up a new user
  *     produces:
  *       - application/json
  *     parameters:
