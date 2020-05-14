@@ -5,15 +5,41 @@ const jwt = require('jsonwebtoken');
 const User = require('./models/userModel');
 const cors = require("cors");
 const routes = require('./routes/route');
+const errorHandler = require('./error-handler');
+const swaggerJSDoc = require('swagger-jsdoc');
 require('dotenv').config();
 
 
 const app = express();                // express app
+
+// swagger definition
+var swaggerDefinition = {
+    info: {
+      title: 'Node Swagger API',
+      version: '1.0.0',
+      description: 'Tutor Api Documentation',
+    },
+    host: 'localhost:4000',
+    basePath: '/api/v1/',
+  };
+  
+  // options for the swagger docs
+  var options = {
+    // import swaggerDefinitions
+    swaggerDefinition: swaggerDefinition,
+    // path to the API docs
+    apis: ['./routes/*.js'],
+  };
+  
+  // initialize swagger-jsdoc
+  var swaggerSpec = swaggerJSDoc(options);
+
+
 const url = process.env.MONGO_URI;    // connection string
 
 
 // set up mongoose connection to database
-mongoose.connect(url,{useNewUrlParser: true, useUnifiedTopology: true}).then(() => {
+mongoose.connect(url,{useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false}).then(() => {
     console.log("Connected to Database");
 }).catch((error) => {
     console.log("Failed to Connect to Database");
@@ -44,7 +70,20 @@ app.use(async (req,res,next) => {
         next();
     }
 });
+
+//api routes
 app.use('/',routes);
+
+
+
+//global error handler
+app.use(errorHandler);
+
+app.get('/api/v1/swagger.json', function(req, res) {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(swaggerSpec);
+  });
+
 // sample test route 
 app.get('/api/v1',(req,res) => {
     res.json({

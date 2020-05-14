@@ -4,12 +4,12 @@ const  Category  = require('../models/categoryModel');
 exports.createCategory = async (req,res,next) => {
     try {
         const { name,level } = req.body;
-        let newCategory = await Category.findOne(name);
-        if(newCategory) return next(new Error("Category aleady Exists!"));
+        let newCategory = await Category.findOne({name});
+        if(newCategory) return next(new Error("Category already Exists!"));
         newCategory = new Category({name,level: level || "pri" });
         await newCategory.save();
         res.status(200).json({
-            message:"Category cerated Successfully!",
+            message:"Category Created Successfully!",
             data: newCategory
         })
     } catch (error) {
@@ -45,7 +45,7 @@ exports.updateCategory = async (req,res,next) => {
     try {
         const update = req.body;
         const categoryId = req.params.categoryId;
-        await Category.findByIdAndUpdate(categoryId,update,{ useFindAndModify : false});
+        await Category.findByIdAndUpdate({categoryId,update});
         const category = await Category.findById(categoryId);
         res.status(200).json({
             data: category,
@@ -59,7 +59,7 @@ exports.updateCategory = async (req,res,next) => {
 exports.deleteCategory = async (req,res,next) => {
     try {
         const categoryId = req.params.id;
-        await Category.findByIdAndDelete(categoryId);
+        await Category.findByIdAndDelete({categoryId});
         res.status(200).json({
             data: null,
             message: "Category successfully Deleted!"

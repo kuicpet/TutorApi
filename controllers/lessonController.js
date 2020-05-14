@@ -46,7 +46,7 @@ exports.updateLesson =async (req,res,next) => {
     try {
         const update = req.body;
         const lessonId = req.params.lessonId;
-        await Lesson.findByIdAndUpdate(lessonId,update,{ useFindAndModify: false});
+        await Lesson.findByIdAndUpdate({lessonId,update});
         const lesson = await Lesson.findById(lessonId);
         res.status(200).json({
             data: lesson,
