@@ -35,7 +35,7 @@ var swaggerDefinition = {
   var swaggerSpec = swaggerJSDoc(options);
 
 
-const url = process.env.MONGO_URI;    // connection string
+const url = "mongodb+srv://tutorApi:VHk6ZktIUztOKwj4@cluster0-x8poy.mongodb.net/tutorApi?retryWrites=true&w=majority";    // connection string
 
 
 // set up mongoose connection to database
